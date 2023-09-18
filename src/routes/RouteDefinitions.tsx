@@ -1,10 +1,12 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Outlet, createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "./RootLayout";
-import { LoginPage } from "../models/login/pages/LoginPage";
+import { LoginPage } from "../modules/login/pages/LoginPage";
+import { SignUpLandingPage } from "../modules/signup/pages/SignUpLandingPage";
 
 export enum ROUTES {
   ROOT = "/",
-  LOGIN = "/login",
+  LOGIN = "login",
+  SIGNUP = "signup",
 }
 
 export const router = createBrowserRouter([
@@ -16,6 +18,16 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.LOGIN,
         element: <LoginPage />,
+      },
+      {
+        path: ROUTES.SIGNUP,
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <SignUpLandingPage />,
+          },
+        ],
       },
     ],
   },

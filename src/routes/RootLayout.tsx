@@ -1,13 +1,14 @@
 import { RootContext } from "../context/RootContext";
 import { useState } from "react";
-import { LoginPage } from "../models/login/pages/LoginPage";
+import { LoginPage } from "../modules/login/pages/LoginPage";
+import { SignUpLandingPage } from "../modules/signup/pages/SignUpLandingPage";
 
 export const RootLayout = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationHeader, setNotificationHeader] = useState("");
   const [notificationCopy, setNotificationCopy] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <RootContext.Provider
@@ -22,7 +23,7 @@ export const RootLayout = () => {
         setIsLoading: setIsLoading,
       }}
     >
-      <>{isLoggedIn ? <p>Hello World</p> : <LoginPage />}</>
+      <>{isLoggedIn ? <SignUpLandingPage /> : <LoginPage />}</>
     </RootContext.Provider>
   );
 };

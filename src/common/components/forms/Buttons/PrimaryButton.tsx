@@ -1,13 +1,8 @@
 import { FC } from "react";
 import { classNames } from "../../../../utilities/helperFunctions";
-import { Icon, ICON_SIZES } from "../../design/Icons";
+import { Icon, ICON_SIZES, ICON_POSITION } from "../../design/Icons";
 import { Link } from "react-router-dom";
 import { BUTTON_SIZES, BUTTON_SKIN } from "./ButtonTypes";
-
-export enum ICON_POSITION {
-  leading,
-  trailing,
-}
 
 export interface ButtonProps {
   size?: BUTTON_SIZES.sm | BUTTON_SIZES.md | BUTTON_SIZES.lg;

@@ -13,6 +13,11 @@ export interface IconProps {
   icon: JSX.Element;
 }
 
+export enum ICON_POSITION {
+  leading,
+  trailing,
+}
+
 export const Icon: FC<IconProps> = ({ size, icon }) => {
   return <div className={size}>{icon}</div>;
 };

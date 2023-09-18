@@ -1,16 +1,14 @@
-import {
-  Button,
-  ButtonLabel,
-} from "../../../common/components/forms/Buttons/PrimaryButton";
+import { Button } from "../../../common/components/forms/Buttons/PrimaryButton";
 import { PageLayout } from "../../../common/layouts/PageLayout";
 import coa from "../../../common/assets/coa.png";
 import { TextInput } from "../../../common/components/forms/Inputs/TextInput";
 import { CheckBox } from "../../../common/components/forms/Inputs/CheckBox";
-import { BUTTON_SKIN } from "../../../common/components/forms/Buttons/ButtonTypes";
 import { Link } from "react-router-dom";
 import { Footer } from "../../../common/components/Footer";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   return (
     <PageLayout pageTitle="Login">
       <div className="flex flex-col h-screen justify-between">
@@ -49,9 +47,12 @@ export const LoginPage = () => {
           <p className="text-sm text-gray-700">
             Don't have an account?{" "}
             <span>
-              <Link className="text-sm text-primary-700 font-semibold" to={"/"}>
-                Sign up
-              </Link>
+              <button
+                onClick={() => navigate("signup", { replace: false })}
+                className="text-sm text-primary-700 font-semibold"
+              >
+                Sign Up
+              </button>
             </span>
           </p>
         </div>

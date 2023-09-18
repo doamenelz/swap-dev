@@ -6,5 +6,5 @@ export const PageLayout: FC<{
   pageTitle: string;
 }> = ({ children, pageTitle }) => {
   useTitle(pageTitle);
-  return <div className="bg-gray-25">{children}</div>;
+  return <div className="bg-gray-25 overscroll-contain">{children}</div>;
 };
