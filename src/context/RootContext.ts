@@ -1,4 +1,6 @@
 import React from "react";
+import { Merchant } from "../common/models/Merchant";
+import { sampleMerchant } from "../utilities/dummyData/merchant";
 
 export const RootContext = React.createContext<{
   showNotification: boolean;
@@ -11,9 +13,13 @@ export const RootContext = React.createContext<{
   setNotificationCopy?: Function;
   isLoading?: boolean;
   setIsLoading?: Function;
+  merchant: Merchant;
+  setMerchant: Function;
 }>({
   showNotification: false,
   toggleNotification: () => {},
   notificationHeader: "",
   setNotificationHeader: () => {},
+  merchant: sampleMerchant,
+  setMerchant: () => {},
 });

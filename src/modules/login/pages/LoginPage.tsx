@@ -26,12 +26,14 @@ export const LoginPage = () => {
             placeHolder="Enter your email"
             id="email"
             type="email"
+            handleChange={() => {}}
           />
           <TextInput
             label="Password"
             placeHolder="Enter your password"
             id="password"
             type="password"
+            handleChange={() => {}}
           />
           <div className="flex justify-between items-center">
             <CheckBox
@@ -48,7 +50,7 @@ export const LoginPage = () => {
             Don't have an account?{" "}
             <span>
               <button
-                onClick={() => navigate("signup", { replace: false })}
+                onClick={() => navigate("/signup", { replace: false })}
                 className="text-sm text-primary-700 font-semibold"
               >
                 Sign Up

@@ -69,13 +69,14 @@ export const Button: FC<ButtonProps> = ({
         </button>
       ) : (
         <Link
+          type={type}
           to={link ?? ""}
           className={classNames(
             sizeClass,
             skinStyleClass,
             `items-center text-sm font-medium text-center rounded-md gap-x-2 sm:text-sm ${
-              disabled && "cursor-not-allowed"
-            }`
+              (disabled || isLoading) && "cursor-not-allowed"
+            } `
           )}
         >
           <ButtonLabel label={label} icon={icon} isLoading={isLoading} />

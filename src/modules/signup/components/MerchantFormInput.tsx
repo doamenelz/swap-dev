@@ -21,6 +21,7 @@ export const MerchantBasicInput: FC<{ isLoading: boolean }> = ({
           placeHolder="Enter your Business Name"
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Business Email"
@@ -30,6 +31,7 @@ export const MerchantBasicInput: FC<{ isLoading: boolean }> = ({
           placeHolder="Enter your Business Email"
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Password"
@@ -39,6 +41,7 @@ export const MerchantBasicInput: FC<{ isLoading: boolean }> = ({
           name={"password"}
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Confirm Password"
@@ -48,9 +51,11 @@ export const MerchantBasicInput: FC<{ isLoading: boolean }> = ({
           name={"confirmPassword"}
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <Button
-          type="submit"
+          componentType="link"
+          link="merchantSignup"
           label="Create an Account"
           fillWidth={true}
           isLoading={isLoading}

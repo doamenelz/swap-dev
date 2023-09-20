@@ -8,11 +8,7 @@ export const CheckBox: FC<{
   const checkBoxHandler = (event: React.FormEvent<HTMLInputElement>) => {
     console.log(event.currentTarget.checked);
     setChecked(event.currentTarget.checked);
-    console.log(`Value is ${event.currentTarget.name}`);
-
-    if (event.currentTarget.checked) {
-    } else {
-    }
+    props.handleChange(props.label, event.currentTarget.checked);
   };
 
   return (

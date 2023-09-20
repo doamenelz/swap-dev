@@ -21,6 +21,7 @@ export const BeneficiaryBasicInput: FC<{ isLoading: boolean }> = ({
           placeHolder="Enter your Name"
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Email"
@@ -29,6 +30,7 @@ export const BeneficiaryBasicInput: FC<{ isLoading: boolean }> = ({
           placeHolder="Enter your Email"
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
           type="email"
         />
         <TextInput
@@ -38,6 +40,7 @@ export const BeneficiaryBasicInput: FC<{ isLoading: boolean }> = ({
           placeHolder="Enter your Email"
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Password"
@@ -47,6 +50,7 @@ export const BeneficiaryBasicInput: FC<{ isLoading: boolean }> = ({
           name={"password"}
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <TextInput
           label="Confirm Password"
@@ -56,6 +60,7 @@ export const BeneficiaryBasicInput: FC<{ isLoading: boolean }> = ({
           name={"confirmPassword"}
           required={true}
           disabled={isLoading}
+          handleChange={() => {}}
         />
         <Button
           type="submit"

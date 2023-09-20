@@ -1,5 +1,12 @@
 import { FC } from "react";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import {
+  EnvelopeIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  PlusIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 export enum ICON_SIZES {
   sm = "w-4 h-4",
   md = "w-5 h-5",
@@ -24,4 +31,9 @@ export const Icon: FC<IconProps> = ({ size, icon }) => {
 
 export const IconList = {
   email: <EnvelopeIcon />,
+  chevronRight: <ChevronRightIcon />,
+  chevronLeft: <ChevronLeftIcon />,
+  plus: <PlusIcon />,
+  edit: <PencilSquareIcon />,
+  trash: <TrashIcon />,
 };
