@@ -52,6 +52,14 @@ export const MerchantStageFour = () => {
     //   })
     // );
 
+    /**
+     * Validate the fields
+     * store the data to Local Storage with an isLogged in state
+     * Route to the login screen
+     * If logged creds matches, route to Dashboard screen
+     *
+     */
+
     registrationContext.setSelectedId("stepFour");
   };
 
@@ -113,14 +121,15 @@ export const MerchantStageFour = () => {
   );
 };
 const FileUpload: FC<{ requiredDoc: FileContent }> = ({ requiredDoc }) => {
+  const rootStore = useContext(RootContext);
   const [file, setFile] = useState<File | null>(null);
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     if (event.currentTarget.files && event.currentTarget.files[0]) {
       if (event.currentTarget.files[0].size > 1 * 1000 * 1024) {
-        // store.setNotificationStatus(false);
-        // store.setNotificationHeader("Could not upload your file");
-        // store.setNotificationCopy!("Maximum size of 1MB is allowed");
-        // store.setShowNotification(true);
+        rootStore.setNotificationStatus(false);
+        rootStore.setNotificationHeader("Could not upload your file");
+        rootStore.setNotificationCopy!("Maximum size of 1MB is allowed");
+        rootStore.toggleNotification(true);
         return false;
       }
     }

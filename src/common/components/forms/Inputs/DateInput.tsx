@@ -18,6 +18,7 @@ export const DateInput: FC<{
   name?: string;
   handleChange: Function;
   prefix?: JSX.Element;
+  showError?: boolean;
 }> = ({
   label,
   id,
@@ -33,9 +34,9 @@ export const DateInput: FC<{
   name,
   handleChange,
   prefix,
+  showError,
 }) => {
   let refValue = useRef<HTMLInputElement | null>(null);
-  const [showError, setShowError] = useState(false);
   const [value, setValue] = useState(`${defaultValue}`);
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
@@ -77,10 +78,8 @@ export const DateInput: FC<{
           )}
         />
       </div>
-      {showError ||
-        (checkValidation && refValue.current?.value === "" && (
-          <p className="mt-1 text-xs text-error-600">{errorLabel}</p>
-        ))}
+
+      {showError && <p className="mt-1 text-xs text-error-600">{errorLabel}</p>}
     </div>
   );
 };

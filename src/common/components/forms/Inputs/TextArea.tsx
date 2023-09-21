@@ -17,6 +17,7 @@ export const TextArea: FC<{
   checkValidation?: boolean;
   name?: string;
   handleChange: Function;
+  showError?: boolean;
 }> = ({
   label,
   id,
@@ -31,9 +32,9 @@ export const TextArea: FC<{
   checkValidation,
   name,
   handleChange,
+  showError,
 }) => {
   let refValue = useRef<HTMLTextAreaElement | null>(null);
-  const [showError, setShowError] = useState(false);
   const [value, setValue] = useState(defaultValue ?? "");
 
   const onChangeHandler = (event: React.FormEvent<HTMLTextAreaElement>) => {
@@ -65,10 +66,7 @@ export const TextArea: FC<{
           className="block w-full rounded-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring- focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6"
         />
       </div>
-      {showError ||
-        (checkValidation && refValue.current?.value === "" && (
-          <p className="mt-1 text-xs text-error-600">{errorLabel}</p>
-        ))}
+      {showError && <p className="mt-1 text-xs text-error-600">{errorLabel}</p>}
     </div>
   );
 };

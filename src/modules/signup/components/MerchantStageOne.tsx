@@ -18,17 +18,72 @@ import { STAGE_STATUS } from "../../../common/layouts/RegistrationLayout";
 import { TextArea } from "../../../common/components/forms/Inputs/TextArea";
 import { Dropdown } from "../../../common/components/forms/Inputs/Dropdown";
 import { BusinessTypes } from "../../../common/models/BusinessType";
-
-//TODO: Set default Business Type
+import {
+  FieldProps,
+  ValidFieldLengths,
+} from "../../../common/models/FieldProps";
 
 export const MerchantStageOne = () => {
   const rootStore = useContext(RootContext);
   const registrationContext = useContext(RegistrationLayoutContext);
 
+  const [phoneNumber, setPhoneNumber] = useState<FieldProps>({
+    value: rootStore.merchant.businessPhone,
+    showError: false,
+    errorMessage: "Please enter a valid phone number",
+  });
+  const [businessType, setBusinessType] = useState<FieldProps>({
+    value: rootStore.merchant.businessType,
+    showError: false,
+    errorMessage: "Please select a value",
+  });
+  const [cac, setCac] = useState<FieldProps>({
+    value: rootStore.merchant.cacNumber,
+    showError: false,
+    errorMessage: "Please enter a valid value",
+  });
+  const [address, setAddress] = useState<FieldProps>({
+    value: rootStore.merchant.businessAddress,
+    showError: false,
+    errorMessage: "Please enter a valid value",
+  });
+
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(rootStore.merchant);
-    toggleStages();
+
+    if (
+      (validateFields(
+        setPhoneNumber,
+        phoneNumber,
+        phoneNumber.value.toString().length <= ValidFieldLengths.phoneNumber
+          ? true
+          : false
+      ) &&
+        validateFields(
+          setCac,
+          cac,
+          cac.value.toString().length <= ValidFieldLengths.cac ? true : false
+        ),
+      validateFields(
+        setAddress,
+        address,
+        address.value.toString().length <= ValidFieldLengths.businessAddress
+          ? true
+          : false
+      ))
+    ) {
+      rootStore.setMerchant({
+        ...rootStore.merchant,
+        businessAddress: address.value,
+        businessType: businessType.value,
+        businessPhone: phoneNumber.value,
+        cacNumber: cac.value,
+      });
+      toggleStages();
+    }
+
+    //
   };
 
   const toggleStages = () => {
@@ -45,6 +100,21 @@ export const MerchantStageOne = () => {
     );
 
     registrationContext.setSelectedId("stepTwo");
+  };
+
+  const validateFields = (
+    update: Function,
+    fieldProp: FieldProps,
+    test: boolean
+  ) => {
+    if (fieldProp.value === "" || test) {
+      update({ ...fieldProp, showError: true });
+      console.log("Error FOund");
+      return false;
+    } else {
+      console.log("Error not found");
+      return true;
+    }
   };
 
   const handleCheckBox = (value: string, checked: boolean) => {
@@ -106,26 +176,34 @@ export const MerchantStageOne = () => {
           <TextInput
             label="Business Phone Number"
             id="businessPhone"
-            placeHolder="123 456 789"
-            defaultValue={rootStore.merchant.businessPhone}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                businessPhone: value,
-              })
-            }
+            placeHolder="123456789"
+            defaultValue={phoneNumber.value as string}
+            handleChange={(value: string) => {
+              setPhoneNumber({
+                ...phoneNumber,
+                value: value,
+                showError:
+                  phoneNumber.showError &&
+                  value.length <= ValidFieldLengths.phoneNumber,
+              });
+            }}
+            errorLabel={phoneNumber.errorMessage}
+            showError={phoneNumber.showError}
             required={true}
+            type="tel"
+            prefix={<p className="text-gray-400 text-xs">+234</p>}
           />
           <Dropdown
             label="Business Type"
             id="businessType"
             options={BusinessTypes}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                businessType: value,
-              })
-            }
+            handleChange={(value: string) => {
+              setBusinessType({
+                ...businessType,
+                value: value,
+                showError: false,
+              });
+            }}
             required={true}
           />
           <TextInput
@@ -133,12 +211,16 @@ export const MerchantStageOne = () => {
             id="cacNumber"
             placeHolder="XXXXX-XXXX"
             defaultValue={rootStore.merchant.cacNumber}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                cacNumber: value,
-              })
-            }
+            handleChange={(value: string) => {
+              setCac({
+                ...cac,
+                value: value,
+                showError:
+                  cac.showError && value.length <= ValidFieldLengths.cac,
+              });
+            }}
+            errorLabel={cac.errorMessage}
+            showError={cac.showError}
             required={true}
           />
           <TextArea
@@ -147,12 +229,17 @@ export const MerchantStageOne = () => {
             span={TEXT_INPUT_SIZE.full}
             defaultValue={rootStore.merchant.businessAddress}
             placeHolder="Enter your Full Business Address"
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                businessAddress: value,
-              })
-            }
+            handleChange={(value: string) => {
+              setAddress({
+                ...address,
+                value: value,
+                showError:
+                  address.showError &&
+                  value.length <= ValidFieldLengths.businessAddress,
+              });
+            }}
+            errorLabel={address.errorMessage}
+            showError={address.showError}
             required={true}
           />
         </GridLayout>

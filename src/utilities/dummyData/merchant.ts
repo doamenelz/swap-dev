@@ -1,3 +1,4 @@
+import { BusinessTypes } from "../../common/models/BusinessType";
 import { Merchant, Personnel } from "../../common/models/Merchant";
 import { generateUUID } from "../helperFunctions";
 export const samplePersonnel: Personnel = {
@@ -31,13 +32,13 @@ export const sampleDirectors: Personnel[] = [
   samplePersonnel2,
 ];
 export const sampleMerchant: Merchant = {
-  id: "001",
+  id: generateUUID(),
   businessName: "Business",
-  businessEmail: "string",
-  businessPhone: "string",
-  businessType: "string",
-  cacNumber: "string",
-  businessAddress: "string",
+  businessEmail: "",
+  businessPhone: "",
+  businessType: BusinessTypes[0],
+  cacNumber: "",
+  businessAddress: "",
   businessNature: "",
   directors: sampleDirectors,
 };

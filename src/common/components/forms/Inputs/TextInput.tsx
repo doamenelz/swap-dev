@@ -1,6 +1,11 @@
 import { FC, useRef, useState } from "react";
 import { TEXT_INPUT_SIZE } from "./InputTypes";
 import { classNames } from "../../../../utilities/helperFunctions";
+import {
+  handleValidate,
+  testForAmount,
+  testForNumber,
+} from "../../../../utilities/RegexUtils";
 //TODO: Add is required indicator
 
 export const TextInput: FC<{
@@ -18,6 +23,7 @@ export const TextInput: FC<{
   name?: string;
   handleChange: Function;
   prefix?: JSX.Element;
+  showError?: boolean;
 }> = ({
   label,
   id,
@@ -33,14 +39,27 @@ export const TextInput: FC<{
   name,
   handleChange,
   prefix,
+  showError,
 }) => {
   let refValue = useRef<HTMLInputElement | null>(null);
-  const [showError, setShowError] = useState(false);
+  // const [showError, setShowError] = useState(false);
   const [value, setValue] = useState(defaultValue ?? "");
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
-    setValue(event.currentTarget.value);
-    handleChange(event.currentTarget.value);
+    if (type === "tel") {
+      if (testForNumber(event.currentTarget.value)) {
+        setValue(event.currentTarget.value);
+        handleChange(event.currentTarget.value);
+      }
+    } else if (type === "number") {
+      if (testForAmount(event.currentTarget.value)) {
+        setValue(event.currentTarget.value);
+        handleChange(event.currentTarget.value);
+      }
+    } else {
+      setValue(event.currentTarget.value);
+      handleChange(event.currentTarget.value);
+    }
   };
 
   return (
@@ -77,10 +96,7 @@ export const TextInput: FC<{
           )}
         />
       </div>
-      {showError ||
-        (checkValidation && refValue.current?.value === "" && (
-          <p className="mt-1 text-xs text-error-600">{errorLabel}</p>
-        ))}
+      {showError && <p className="mt-1 text-xs text-error-600">{errorLabel}</p>}
     </div>
   );
 };

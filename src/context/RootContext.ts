@@ -15,6 +15,8 @@ export const RootContext = React.createContext<{
   setIsLoading?: Function;
   merchant: Merchant;
   setMerchant: Function;
+  notificationStatus?: boolean;
+  setNotificationStatus: Function;
 }>({
   showNotification: false,
   toggleNotification: () => {},
@@ -22,4 +24,6 @@ export const RootContext = React.createContext<{
   setNotificationHeader: () => {},
   merchant: sampleMerchant,
   setMerchant: () => {},
+  notificationStatus: false,
+  setNotificationStatus: () => {},
 });

@@ -5,6 +5,7 @@ import { SignUpLandingPage } from "../modules/signup/pages/SignUpLandingPage";
 import { Outlet } from "react-router";
 import { Merchant } from "../common/models/Merchant";
 import { sampleMerchant } from "../utilities/dummyData/merchant";
+import { TopNotification } from "../common/components/TopNotification";
 
 export const RootLayout = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -13,6 +14,7 @@ export const RootLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [merchant, setMerchant] = useState<Merchant>(sampleMerchant);
+  const [notificationStatus, setNotificationStatus] = useState(false);
 
   return (
     <RootContext.Provider
@@ -23,6 +25,8 @@ export const RootLayout = () => {
         setNotificationHeader: setNotificationHeader,
         setNotificationCopy: setNotificationCopy,
         notificationCopy: notificationCopy,
+        notificationStatus: notificationStatus,
+        setNotificationStatus: setNotificationStatus,
         isLoading: isLoading,
         setIsLoading: setIsLoading,
         merchant: merchant,
@@ -31,6 +35,9 @@ export const RootLayout = () => {
     >
       <>
         <Outlet />
+        <div className="fixed z-50">
+          <TopNotification />
+        </div>
       </>
     </RootContext.Provider>
   );

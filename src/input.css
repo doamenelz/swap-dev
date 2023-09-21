@@ -4,3 +4,8 @@
 
 @import "tailwindcss/utilities";
 @import url("https://rsms.me/inter/inter.css");
+/* input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} */
