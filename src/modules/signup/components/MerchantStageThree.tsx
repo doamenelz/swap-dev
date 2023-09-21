@@ -20,11 +20,14 @@ import { Dropdown } from "../../../common/components/forms/Inputs/Dropdown";
 import { HeadCountOptions } from "../../../common/models/Headcount";
 import { Personnel } from "../../../common/models/Merchant";
 import { Transition } from "@headlessui/react";
+import { DateInput } from "../../../common/components/forms/Inputs/DateInput";
+import { generateUUID } from "../../../utilities/helperFunctions";
 export const MerchantStageThree = () => {
   const rootStore = useContext(RootContext);
 
   const registrationContext = useContext(RegistrationLayoutContext);
   const [isEditingDirector, setIsEditingDirector] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [selectedDirector, setSelectedDirector] = useState<Personnel>();
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -141,7 +144,7 @@ export const MerchantStageThree = () => {
             }
             required={true}
           />
-          <TextInput
+          <DateInput
             label="Date of Birth"
             id="dob"
             type="date"
@@ -218,6 +221,9 @@ export const MerchantStageThree = () => {
             <AddDirectorComponent
               setIsEditingDirector={setIsEditingDirector}
               selectedDirector={selectedDirector}
+              setSelectedDirector={setSelectedDirector}
+              setIsUpdate={setIsUpdate}
+              isUpdate={isUpdate}
             />
           </Transition>
           <Transition
@@ -235,6 +241,7 @@ export const MerchantStageThree = () => {
                 setSelectedDirector={setSelectedDirector}
                 key={index}
                 setIsEditingDirector={setIsEditingDirector}
+                setIsUpdate={setIsUpdate}
               />
             ))}
           </Transition>
@@ -269,12 +276,12 @@ const DirectorShell: FC<{
   director: Personnel;
   setIsEditingDirector: Function;
   setSelectedDirector: Function;
-}> = ({ director, setIsEditingDirector, setSelectedDirector }) => {
-  const [edit, setEdit] = useState(false);
-
+  setIsUpdate: Function;
+}> = ({ director, setIsEditingDirector, setSelectedDirector, setIsUpdate }) => {
   const editHandler = () => {
     setSelectedDirector(director);
     setIsEditingDirector(true);
+    setIsUpdate(true);
   };
 
   return (
@@ -306,11 +313,57 @@ const DirectorShell: FC<{
 const AddDirectorComponent: FC<{
   selectedDirector?: Personnel;
   setIsEditingDirector: Function;
-}> = ({ selectedDirector, setIsEditingDirector }) => {
+  setSelectedDirector: Function;
+  setIsUpdate: Function;
+  isUpdate: boolean;
+}> = ({
+  selectedDirector,
+  setIsEditingDirector,
+  setSelectedDirector,
+  setIsUpdate,
+  isUpdate,
+}) => {
   const rootStore = useContext(RootContext);
-  const [director, setDirector] = useState<Personnel>();
+  const [firstName, setFirstName] = useState(selectedDirector?.firstName ?? "");
+  const [lastName, setLastName] = useState(selectedDirector?.lastName ?? "");
+  const [nin, setNIN] = useState(selectedDirector?.nin ?? "");
+  const [bvn, setBVN] = useState(selectedDirector?.bvn ?? "");
 
-  const updatePersonnel = () => {};
+  const updatePersonnel = () => {
+    const newDirector: Personnel = {
+      id: generateUUID(),
+      firstName: selectedDirector?.firstName ?? "",
+      lastName: selectedDirector?.lastName ?? "",
+      bvn: selectedDirector?.bvn ?? "",
+      nin: selectedDirector?.nin ?? "",
+    };
+
+    const _directors = [...(rootStore.merchant.directors ?? [])];
+    console.log(selectedDirector);
+
+    if (isUpdate) {
+      rootStore.setMerchant({
+        ...rootStore.merchant,
+        directors: rootStore.merchant.directors?.map((item) => {
+          if (item.id === selectedDirector!.id) {
+            return selectedDirector;
+          } else {
+            return item;
+          }
+        }),
+      });
+      setIsUpdate(false);
+    } else {
+      rootStore.setMerchant({
+        ...rootStore.merchant,
+        directors: [..._directors, newDirector],
+      });
+      setSelectedDirector(undefined);
+      setIsUpdate(false);
+    }
+
+    toggleEdit();
+  };
 
   const toggleEdit = () => {
     setIsEditingDirector(false);
@@ -324,14 +377,8 @@ const AddDirectorComponent: FC<{
           placeHolder="Enter a First Name"
           disabled={false}
           defaultValue={selectedDirector?.firstName}
-          handleChange={(value: Date) =>
-            rootStore.setMerchant({
-              ...rootStore.merchant,
-              taxesAndFinancial: {
-                ...rootStore.merchant.taxesAndFinancial,
-                dateRegistered: value,
-              },
-            })
+          handleChange={(value: string) =>
+            setSelectedDirector({ ...selectedDirector, firstName: value })
           }
           required={true}
         />
@@ -341,14 +388,8 @@ const AddDirectorComponent: FC<{
           placeHolder="Enter a Last Name"
           disabled={false}
           defaultValue={selectedDirector?.lastName}
-          handleChange={(value: Date) =>
-            rootStore.setMerchant({
-              ...rootStore.merchant,
-              taxesAndFinancial: {
-                ...rootStore.merchant.taxesAndFinancial,
-                dateRegistered: value,
-              },
-            })
+          handleChange={(value: string) =>
+            setSelectedDirector({ ...selectedDirector, lastName: value })
           }
           required={true}
         />
@@ -358,14 +399,8 @@ const AddDirectorComponent: FC<{
           placeHolder="0000 0000 0000 0000"
           disabled={false}
           defaultValue={selectedDirector?.nin}
-          handleChange={(value: Date) =>
-            rootStore.setMerchant({
-              ...rootStore.merchant,
-              taxesAndFinancial: {
-                ...rootStore.merchant.taxesAndFinancial,
-                dateRegistered: value,
-              },
-            })
+          handleChange={(value: string) =>
+            setSelectedDirector({ ...selectedDirector, nin: value })
           }
           required={true}
         />
@@ -377,17 +412,16 @@ const AddDirectorComponent: FC<{
           required={true}
           defaultValue={selectedDirector?.bvn}
           handleChange={(value: string) =>
-            rootStore.setMerchant({
-              ...rootStore.merchant,
-              taxesAndFinancial: {
-                ...rootStore.merchant.taxesAndFinancial,
-                tin: value,
-              },
-            })
+            setSelectedDirector({ ...selectedDirector, bvn: value })
           }
         />
         <div className="space-x-3">
-          <Button label="Save" skin={BUTTON_SKIN.secondary} />
+          <Button
+            label={`${isUpdate ? "Update" : "Save"}`}
+            skin={BUTTON_SKIN.secondary}
+            onClick={updatePersonnel}
+            type="button"
+          />
           <Button
             label="Cancel"
             type="button"
@@ -395,12 +429,23 @@ const AddDirectorComponent: FC<{
             skin={BUTTON_SKIN.linkColor}
           />
         </div>
-        {selectedDirector && (
+        {isUpdate && (
           <div className="justify-end flex">
             <Button
               label="Delete Director"
               type="button"
-              onClick={toggleEdit}
+              onClick={() => {
+                console.log(`Im deleting ${selectedDirector}`);
+                const _newArray = rootStore.merchant.directors?.filter(
+                  (director) => director.id !== selectedDirector?.id
+                );
+                rootStore.setMerchant({
+                  ...rootStore.merchant,
+                  directors: _newArray,
+                });
+                setIsUpdate(false);
+                toggleEdit();
+              }}
               skin={BUTTON_SKIN.linkColor}
               destructive={true}
               icon={{

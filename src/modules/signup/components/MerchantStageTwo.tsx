@@ -16,6 +16,7 @@ import { BUTTON_SKIN } from "../../../common/components/forms/Buttons/ButtonType
 import { Dropdown } from "../../../common/components/forms/Inputs/Dropdown";
 import { TextArea } from "../../../common/components/forms/Inputs/TextArea";
 import { RegistrationLayoutContext } from "../../../context/RegistrationLayoutContext";
+import { DateInput } from "../../../common/components/forms/Inputs/DateInput";
 
 export const MerchantStageTwo = () => {
   const rootStore = useContext(RootContext);
@@ -49,12 +50,12 @@ export const MerchantStageTwo = () => {
         copy="Revenue, Taxes and other Financial Information related to your company"
       >
         <GridLayout type={GRID_TYPE.twoCol}>
-          <TextInput
+          <DateInput
             label="Date Registered"
             id="dateRegistered"
             placeHolder="00000 00000 00000"
             disabled={false}
-            defaultValue={rootStore.merchant.taxesAndFinancial?.dateRegistered.toString()}
+            defaultValue={rootStore.merchant.taxesAndFinancial?.dateRegistered}
             handleChange={(value: Date) =>
               rootStore.setMerchant({
                 ...rootStore.merchant,
@@ -84,12 +85,12 @@ export const MerchantStageTwo = () => {
               })
             }
           />
-          <TextInput
+          <DateInput
             label="Last Tax Year"
             id="dateRegistered"
             placeHolder="Enter your Business name"
             disabled={false}
-            defaultValue={rootStore.merchant.taxesAndFinancial?.dateRegistered.toString()}
+            defaultValue={rootStore.merchant.taxesAndFinancial?.dateRegistered}
             handleChange={(value: Date) =>
               rootStore.setMerchant({
                 ...rootStore.merchant,

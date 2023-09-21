@@ -10,6 +10,7 @@ import { RegistrationLayoutContext } from "../../../context/RegistrationLayoutCo
 import { MerchantStageOne } from "../components/MerchantStageOne";
 import { MerchantStageTwo } from "../components/MerchantStageTwo";
 import { MerchantStageThree } from "../components/MerchantStageThree";
+import { MerchantStageFour } from "../components/MerchantStageFour";
 
 const stages: StageHeaderProps[] = [
   {
@@ -61,6 +62,7 @@ export const MerchantRegistrationPage = () => {
             {activeId === "stepOne" && <MerchantStageOne />}{" "}
             {activeId === "stepTwo" && <MerchantStageTwo />}
             {activeId === "stepThree" && <MerchantStageThree />}
+            {activeId === "stepFour" && <MerchantStageFour />}
           </>
         }
       />

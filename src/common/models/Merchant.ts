@@ -26,10 +26,11 @@ interface TaxesAndFinancial {
 }
 
 export interface Personnel {
+  id: string;
   firstName: string;
   lastName: string;
   nin: string;
   bvn: string;
   phoneNumber?: string;
-  dob?: string;
+  dob?: Date;
 }

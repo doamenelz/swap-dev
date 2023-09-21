@@ -36,7 +36,7 @@ export const TextInput: FC<{
 }) => {
   let refValue = useRef<HTMLInputElement | null>(null);
   const [showError, setShowError] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue ?? "");
 
   const onChangeHandler = (event: React.FormEvent<HTMLInputElement>) => {
     setValue(event.currentTarget.value);
@@ -59,14 +59,14 @@ export const TextInput: FC<{
           </div>
         )}
         <input
-          value={defaultValue ? defaultValue : value}
+          value={value}
           onChange={onChangeHandler}
           ref={refValue}
           type={type}
           name={name}
           id={id}
           pattern={pattern}
-          defaultValue={defaultValue}
+          // defaultValue={defaultValue}
           placeholder={placeHolder}
           disabled={disabled}
           required={required}
