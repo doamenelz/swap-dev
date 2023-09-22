@@ -167,6 +167,7 @@ export const MerchantBasicInput: FC<{ isLoading: boolean }> = ({
           showError={confirmPassword.showError}
         />
         <Button
+          componentType="button"
           // link="merchantSignup"
           label="Create an Account"
           type="submit"
