@@ -18,10 +18,7 @@ export const SignUpBasic = () => {
 
   return (
     <>
-      <form
-        onSubmit={onSubmitHandler}
-        className="max-w-sm mx-auto sm:px-4 w-80 sm:w-96 mt-4"
-      >
+      <div className="max-w-sm mx-auto sm:px-4 w-80 sm:w-96 mt-4">
         <img src={coa} alt="main-logo" className="w-16 h-16 mx-auto" />
         <h1 className="mt-4 text-2xl font-semibold text-gray-800 text-center">
           Create your SWAP Account
@@ -62,7 +59,7 @@ export const SignUpBasic = () => {
             copy={errorMessage}
           />
         )} */}
-      </form>
+      </div>
     </>
   );
 };

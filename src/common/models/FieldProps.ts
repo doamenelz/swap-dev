@@ -9,4 +9,6 @@ export const ValidFieldLengths = {
   phoneNumber: 9,
   businessAddress: 5,
   tin: 7,
+  bvn: 10,
+  nin: 10,
 };

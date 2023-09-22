@@ -14,6 +14,7 @@ import {
 } from "../../../common/components/design/Icons";
 import { RegistrationLayoutContext } from "../../../context/RegistrationLayoutContext";
 import { STAGE_STATUS } from "../../../common/layouts/RegistrationLayout";
+import { useNavigate } from "react-router";
 
 enum REQUIRED_DOCS {
   cac,
@@ -29,6 +30,7 @@ interface FileContent {
 }
 
 export const MerchantStageFour = () => {
+  const navigate = useNavigate();
   const rootStore = useContext(RootContext);
   const options: string[] = ["Required Document"];
   const registrationContext = useContext(RegistrationLayoutContext);
@@ -51,7 +53,6 @@ export const MerchantStageFour = () => {
     //     }
     //   })
     // );
-
     /**
      * Validate the fields
      * store the data to Local Storage with an isLogged in state
@@ -59,8 +60,7 @@ export const MerchantStageFour = () => {
      * If logged creds matches, route to Dashboard screen
      *
      */
-
-    registrationContext.setSelectedId("stepFour");
+    // registrationContext.setSelectedId("stepFour");
   };
 
   return (
@@ -71,7 +71,7 @@ export const MerchantStageFour = () => {
         businessType={rootStore.merchant.businessType}
       >
         <>
-          <div className="text-sm font-semibold text-gray-600">
+          {/* <div className="text-sm font-semibold text-gray-600">
             Files Uploaded
             <span
               className={classNames(
@@ -83,7 +83,7 @@ export const MerchantStageFour = () => {
             >
               {allFiles.length} / 4 Uploaded
             </span>
-          </div>
+          </div> */}
           <Table options={options} hasButton={true}>
             {allFiles.map((file) => (
               <tr key={file.docType} className="">
@@ -108,8 +108,19 @@ export const MerchantStageFour = () => {
             }}
           />
           <Button
-            type="submit"
+            type="button"
+            componentType="button"
+            link="/dashboard"
             label="Next"
+            onClick={() => {
+              rootStore.setNotificationStatus(true);
+              rootStore.setNotificationHeader("Success!");
+              rootStore.setNotificationCopy!(
+                "Your account was successfully created"
+              );
+              rootStore.toggleNotification(true);
+              navigate("/dashboard");
+            }}
             icon={{
               position: ICON_POSITION.trailing,
               asset: <Icon icon={IconList.chevronRight} size={ICON_SIZES.sm} />,

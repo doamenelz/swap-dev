@@ -3,12 +3,14 @@ import { RootLayout } from "./RootLayout";
 import { LoginPage } from "../modules/login/pages/LoginPage";
 import { SignUpLandingPage } from "../modules/signup/pages/SignUpLandingPage";
 import { MerchantRegistrationPage } from "../modules/signup/pages/MerchantRegistrationPage";
+import { Dashboard } from "../modules/dashboard/pages/Dashboard";
 
 export enum ROUTES {
   ROOT = "/",
   LOGIN = "login",
   SIGNUP = "/signup",
   MERCHANT_SIGNUP = "merchantSignup",
+  DASHBOARD = "/dashboard",
 }
 
 export const router = createBrowserRouter([
@@ -31,6 +33,10 @@ export const router = createBrowserRouter([
             element: <MerchantRegistrationPage />,
           },
         ],
+      },
+      {
+        path: ROUTES.DASHBOARD,
+        element: <Dashboard />,
       },
     ],
   },

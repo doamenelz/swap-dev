@@ -16,6 +16,10 @@ import {
   BUTTON_SIZES,
   BUTTON_SKIN,
 } from "../../../common/components/forms/Buttons/ButtonTypes";
+import {
+  FieldProps,
+  ValidFieldLengths,
+} from "../../../common/models/FieldProps";
 import { Dropdown } from "../../../common/components/forms/Inputs/Dropdown";
 import { HeadCountOptions } from "../../../common/models/Headcount";
 import { Personnel } from "../../../common/models/Merchant";
@@ -25,6 +29,45 @@ import { generateUUID } from "../../../utilities/helperFunctions";
 export const MerchantStageThree = () => {
   const rootStore = useContext(RootContext);
 
+  //Form Fields Start
+  const [firstName, setFirstName] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.firstName ?? "",
+    showError: false,
+    errorMessage: "Please enter a First Name",
+  });
+
+  const [lastName, setLastName] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.lastName ?? "",
+    showError: false,
+    errorMessage: "Please enter a Last Name",
+  });
+
+  const [nin, setNin] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.nin ?? "",
+    showError: false,
+    errorMessage: "Please enter a valid value",
+  });
+
+  const [bvn, setBVN] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.bvn ?? "",
+    showError: false,
+    errorMessage: "Please enter a valid value",
+  });
+
+  const [phone, setPhoneNumber] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.phoneNumber ?? "",
+    showError: false,
+    errorMessage: "Please enter a valid phone number",
+  });
+
+  const [dob, setDob] = useState<FieldProps>({
+    value: rootStore.merchant.personnel?.dob ?? "",
+    showError: false,
+    errorMessage: "Please enter a valid date",
+  });
+
+  //Form Fields End
+
   const registrationContext = useContext(RegistrationLayoutContext);
   const [isEditingDirector, setIsEditingDirector] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -32,7 +75,67 @@ export const MerchantStageThree = () => {
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(rootStore.merchant);
-    toggleStages();
+
+    if (
+      validateFields(
+        setFirstName,
+        firstName,
+        firstName.value.toString().length <= 1 ? true : false
+      ) &&
+      validateFields(
+        setLastName,
+        lastName,
+        lastName.value.toString().length <= 1 ? true : false
+      ) &&
+      validateFields(
+        setNin,
+        nin,
+        nin.value.toString().length <= ValidFieldLengths.nin ? true : false
+      ) &&
+      validateFields(
+        setBVN,
+        bvn,
+        bvn.value.toString().length <= ValidFieldLengths.bvn ? true : false
+      ) &&
+      validateFields(
+        setPhoneNumber,
+        phone,
+        phone.value.toString().length <= ValidFieldLengths.phoneNumber
+          ? true
+          : false
+      ) &&
+      validateFields(setDob, dob, dob.value.toString() === "" ? true : false)
+    ) {
+      rootStore.setMerchant({
+        ...rootStore.merchant,
+        personnel: {
+          ...rootStore.merchant.personnel,
+          id: generateUUID(),
+          firstName: firstName.value,
+          lastName: lastName.value,
+          nin: nin.value,
+          bvn: bvn.value,
+          phoneNumber: phone.value,
+          dob: dob.value,
+        },
+      });
+      toggleStages();
+    }
+  };
+
+  const validateFields = (
+    update: Function,
+    fieldProp: FieldProps,
+    test: boolean
+  ) => {
+    if (fieldProp.value === "" || test) {
+      update({ ...fieldProp, showError: true });
+      console.log("Error FOund");
+      return false;
+    } else {
+      console.log("Error not found");
+      return true;
+    }
   };
 
   const toggleStages = () => {
@@ -63,17 +166,17 @@ export const MerchantStageThree = () => {
             id="firstName"
             placeHolder="Enter your First Name"
             disabled={false}
-            defaultValue={rootStore.merchant.personnel?.firstName}
-            handleChange={(value: Date) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  dateRegistered: value,
-                },
-              })
-            }
+            defaultValue={firstName.value.toString()}
             required={true}
+            handleChange={(value: string) => {
+              setFirstName({
+                ...firstName,
+                value: value,
+                showError: firstName.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={firstName.errorMessage}
+            showError={firstName.showError}
           />
           <TextInput
             label="Last Name"
@@ -81,32 +184,32 @@ export const MerchantStageThree = () => {
             placeHolder="Enter your Last Name"
             disabled={false}
             required={true}
-            defaultValue={rootStore.merchant.personnel?.lastName}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  tin: value,
-                },
-              })
-            }
+            defaultValue={lastName.value.toString()}
+            handleChange={(value: string) => {
+              setLastName({
+                ...lastName,
+                value: value,
+                showError: lastName.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={lastName.errorMessage}
+            showError={lastName.showError}
           />
           <TextInput
             label="National Identity Number (NIN)"
             id="nin"
             placeHolder="0000 0000 0000 0000"
             disabled={false}
-            defaultValue={rootStore.merchant.personnel?.nin}
-            handleChange={(value: Date) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  dateRegistered: value,
-                },
-              })
-            }
+            defaultValue={nin.value.toString()}
+            handleChange={(value: string) => {
+              setNin({
+                ...nin,
+                value: value,
+                showError: nin.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={nin.errorMessage}
+            showError={nin.showError}
             required={true}
           />
           <TextInput
@@ -114,34 +217,36 @@ export const MerchantStageThree = () => {
             id="bvn"
             placeHolder="0000 0000 0000"
             disabled={false}
+            type="number"
             required={true}
-            defaultValue={rootStore.merchant.personnel?.bvn}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  tin: value,
-                },
-              })
-            }
+            defaultValue={bvn.value.toString()}
+            handleChange={(value: string) => {
+              setBVN({
+                ...bvn,
+                value: value,
+                showError: bvn.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={bvn.errorMessage}
+            showError={bvn.showError}
           />
           <TextInput
             label="Phone Number"
             id="phoneNumber"
             placeHolder="123456789"
+            type="tel"
             disabled={false}
-            defaultValue={rootStore.merchant.personnel?.phoneNumber}
             prefix={<p className="text-gray-400 text-xs">+234</p>}
-            handleChange={(value: Date) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  dateRegistered: value,
-                },
-              })
-            }
+            defaultValue={phone.value.toString()}
+            handleChange={(value: string) => {
+              setPhoneNumber({
+                ...phone,
+                value: value,
+                showError: phone.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={phone.errorMessage}
+            showError={phone.showError}
             required={true}
           />
           <DateInput
@@ -151,15 +256,15 @@ export const MerchantStageThree = () => {
             disabled={false}
             required={true}
             defaultValue={rootStore.merchant.personnel?.dob}
-            handleChange={(value: string) =>
-              rootStore.setMerchant({
-                ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  tin: value,
-                },
-              })
-            }
+            handleChange={(value: string) => {
+              setDob({
+                ...dob,
+                value: value,
+                showError: dob.showError && value.toString() === "",
+              });
+            }}
+            errorLabel={dob.errorMessage}
+            showError={dob.showError}
           />
           <Dropdown
             label="Current Staff Headcount"
@@ -167,13 +272,10 @@ export const MerchantStageThree = () => {
             disabled={false}
             options={HeadCountOptions}
             defaultValue={rootStore.merchant.headCount}
-            handleChange={(value: Date) =>
+            handleChange={(value: string) =>
               rootStore.setMerchant({
                 ...rootStore.merchant,
-                taxesAndFinancial: {
-                  ...rootStore.merchant.taxesAndFinancial,
-                  dateRegistered: value,
-                },
+                headCount: value,
               })
             }
             required={true}
